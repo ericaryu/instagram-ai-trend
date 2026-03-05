@@ -57,7 +57,7 @@ def build_suggestion_prompt(reels: list) -> str:
 
         trend_lines.append(
             f"{i+1}. @{r.get('ownerUsername')} "
-            f"(조회수 {r.get('videoPlayCount', 0):,}, 인게이지먼트 {r.get('engagement_score', 0):,})\n"
+            f"(조회수 {r.get('videoPlayCount') or 0:,}, 인게이지먼트 {r.get('engagement_score') or 0:,})\n"
             f"    훅: {analysis.get('hook', 'N/A')}\n"
             f"    포맷: {analysis.get('format', 'N/A')}\n"
             f"    톤: {analysis.get('tone', 'N/A')}\n"

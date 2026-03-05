@@ -45,7 +45,7 @@ CONTENT_TYPE_MAP = {
     "Image": "image",
     "Sidecar": "carousel",
 }
-TARGET_CONTENT_TYPES = {"reel"}
+TARGET_CONTENT_TYPES = {"reel", "image", "carousel"}  # 릴스 없을 시 전체 포함
 
 # --- Field Aliases (Apify output normalization) ---
 FIELD_ALIASES = {

@@ -33,7 +33,7 @@ def build_analysis_prompt(reel: dict) -> str:
 
 ## 릴스 데이터
 - 해시태그: {reel.get('hashtag_source', '')} (카테고리: {reel.get('hashtag_category', '')})
-- 조회수: {reel.get('videoPlayCount', 0):,} / 좋아요: {reel.get('likesCount', 0):,} / 댓글: {reel.get('commentsCount', 0):,}
+- 조회수: {reel.get('videoPlayCount') or 0:,} / 좋아요: {reel.get('likesCount') or 0:,} / 댓글: {reel.get('commentsCount') or 0:,}
 - 조회 대비 인게이지먼트: {reel.get('engagement_to_views', 0)}%
 
 ## 콘텐츠 내용
