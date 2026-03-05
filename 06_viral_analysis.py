@@ -5,6 +5,7 @@ Step 6: "왜 떴는지" 바이럴 분석 (GPT-4o)
 """
 import argparse
 import json
+import re
 import sys
 import time
 
@@ -25,29 +26,37 @@ DUMMY_ANALYSIS = {
 
 
 def build_analysis_prompt(reel: dict) -> str:
-    # TODO(human): 이 함수의 프롬프트 내용을 직접 작성해보세요.
-    # 아래 함수 시그니처와 반환 타입(str)을 유지하면서,
-    # reel 딕셔너리의 정보를 활용해 GPT-4o에게 바이럴 분석을 요청하는 프롬프트를 만드세요.
-    #
-    # reel에서 쓸 수 있는 주요 필드:
-    #   reel["hashtag_source"]        - 해시태그 (예: "AI")
-    #   reel["hashtag_category"]      - 카테고리 (예: "AI_일반")
-    #   reel["ownerUsername"]         - 크리에이터 username
-    #   reel["videoPlayCount"]        - 조회수
-    #   reel["likesCount"]            - 좋아요 수
-    #   reel["commentsCount"]         - 댓글 수
-    #   reel["engagement_to_views"]   - 조회 대비 인게이지먼트 %
-    #   reel["content_summary"]       - 캡션+나레이션+댓글 통합 텍스트
-    #
-    # GPT에게 요청할 5가지 분석 관점:
-    #   1. hook      - 첫 3초 시선을 끄는 요소
-    #   2. topic     - AI 주제 + 타겟 오디언스
-    #   3. format    - 튜토리얼? 비포/애프터? 리스트형? 스토리텔링?
-    #   4. tone      - 놀라움? 실용? 유머? 공감? FOMO?
-    #   5. viral_factor - 핵심 바이럴 이유 1-2가지
-    #
-    # 반환 형식: 한국어로 답변하도록 명시, JSON으로 반환 요청
-    pass
+    return f"""당신은 한국 AI 콘텐츠 시장을 잘 아는 인스타 릴스 바이럴 분석가입니다.
+
+아래 인스타그램 릴스 데이터를 보고, 이 영상이 왜 높은 반응을 얻었는지
+자유롭게 분석해주세요.
+
+## 릴스 데이터
+- 해시태그: {reel.get('hashtag_source', '')} (카테고리: {reel.get('hashtag_category', '')})
+- 조회수: {reel.get('videoPlayCount', 0):,} / 좋아요: {reel.get('likesCount', 0):,} / 댓글: {reel.get('commentsCount', 0):,}
+- 조회 대비 인게이지먼트: {reel.get('engagement_to_views', 0)}%
+
+## 콘텐츠 내용
+{reel.get('content_summary', '(내용 없음)')}
+
+## 분석 요청
+이 영상이 왜 떴는지 자유롭게 분석하되,
+반드시 아래 5가지 관점은 포함해주세요:
+
+1. hook — 첫 1-3초의 시선 집중 장치를 "시선집중 → 호기심증폭 → 가치약속"
+   프레임으로 분해해줘. 세 단계 중 어디가 강했고, 어디가 빠졌는지도.
+2. topic — 어떤 AI 세부 주제를 다루는지, 타겟 시청자는 누구인지.
+3. format — 튜토리얼 / 비포애프터 / 리스트형 / 스토리텔링 / 비교 / 밈 중
+   어디에 해당하는지, 그 포맷이 이 주제에 왜 잘 맞았는지.
+4. tone — 감정 톤(놀라움/실용/유머/공감/FOMO 등)과
+   그 톤이 타겟 시청자의 어떤 심리를 건드렸는지.
+5. viral_factor — 위 4가지를 종합해서,
+   이 영상이 특히 잘 된 핵심 이유 1가지.
+   그리고 "시청자가 왜 끝까지 봤을지" 이유도 한 줄로 추정해줘.
+
+각 항목 1-2문장으로 간결하게. 한국어로 답변.
+JSON 형식으로:
+{{"hook": "...", "topic": "...", "format": "...", "tone": "...", "viral_factor": "..."}}"""
 
 
 def parse_analysis_response(content: str) -> dict:
